@@ -43,7 +43,9 @@ module Scissor
   class FFmpeg
     include Command
 
-    def initialize(path = which('ffmpeg'), work_dir = Dir.tmpdir + "/scissor-video-ffmpeg-work")
+    attr_reader :work_dir
+
+    def initialize(path = which('ffmpeg'), work_dir = Dir.tmpdir + "/scissor-video-ffmpeg-work-" + $$.to_s)
       @command = path.chomp
       @work_dir = Pathname.new(work_dir)
       @work_dir.mkpath
@@ -84,6 +86,10 @@ module Scissor
       else
         args[:input_video]
       end
+    end
+
+    def cleanup
+      @work_dir.rmtree
     end
 
     def encode(args)

@@ -9,7 +9,7 @@ include FileUtils
 describe Scissor do
   before do
     @video = Scissor(fixture('sample.flv'))
-    @tmp_dir = "./tmp" #"#{Dir.tmpdir}/scissor-video-test"
+    @tmp_dir = "#{Dir.tmpdir}/scissor-video-test"
     mkdir @tmp_dir
   end
 
@@ -30,9 +30,26 @@ describe Scissor do
 
   it "should write to file and return new instance of Scissor" do
     scissor = @video.slice(0, 20) + @video.slice(20, 5)
-    result = scissor.to_file(@tmp_dir + 'out.avi')
+    result = scissor.to_file(@tmp_dir + '/out.avi')
     result.should be_an_instance_of(Scissor::Chunk)
     result.duration.to_i.should eql(25)
   end
 
+  it "should write to file with many fragments" do
+    scissor = (@video.slice(0, 20) / 10).inject(Scissor()){|m, s| m + s } + @video.slice(20, 5)
+    result = scissor.to_file(@tmp_dir + '/out.avi')
+    result.should be_an_instance_of(Scissor::Chunk)
+    result.duration.to_i.should eql(25)
+  end
+
+  it "should save workfiles if save_workfiles option is true" do
+    scissor = @video.slice(0, 20) + @video.slice(20, 5)
+    result = scissor.to_file(@tmp_dir + '/out.avi', :save_workfiles => true)
+    result.should be_an_instance_of(Scissor::Chunk)
+    result.duration.to_i.should eql(25)
+    
+    ffmpeg = Scissor::FFmpeg.new
+    ffmpeg.work_dir.should be_exist
+    ffmpeg.cleanup
+  end
 end

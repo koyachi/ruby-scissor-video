@@ -22,7 +22,8 @@ module Scissor
       end
 
       options = {
-        :overwrite => false
+        :overwrite => false,
+        :save_workfiles => false
       }.merge(options)
 
       filename = Pathname.new(filename)
@@ -35,13 +36,13 @@ module Scissor
         end
       end
 
-      position = 0.0
-      tmpdir = Pathname.new('/tmp/scissor-' + $$.to_s)
-      tmpdir.mkpath
-      tmpfile = tmpdir + 'tmp.avi'
-
       concat_files = []
       ffmpeg = FFmpeg.new
+
+      position = 0.0
+      tmpdir = ffmpeg.work_dir
+      tmpfile = tmpdir + 'tmp.avi'
+
       begin
         @fragments.each_with_index do |fragment, index|
           fragment_filename = fragment.filename
@@ -67,13 +68,12 @@ module Scissor
                               :output_video => tmpfile
         })
 
-#        File.rename(tmpfile, filename)
         ffmpeg.encode({
                         :input_video => tmpfile,
                         :output_video => filename
         })
       ensure
-        tmpdir.rmtree
+        ffmpeg.cleanup unless options[:save_workfiles]
       end
 
       self.class.new(filename)
