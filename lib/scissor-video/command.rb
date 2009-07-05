@@ -6,6 +6,9 @@ module Scissor
   class Command
     attr_accessor :work_dir, :command
 
+    class Error < StandardError; end
+    class CommandFailed < Error; end
+
     def initialize(args)
       @command = args[:command]
       @work_dir = args[:work_dir] || Dir.tmpdir + "/scissor-video-work-" + $$.to_s

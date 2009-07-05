@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 $:.unshift File.dirname(__FILE__)
 
 require 'spec_helper'
@@ -17,11 +18,43 @@ describe Scissor::Command do
     command = Scissor::Command.new({})
     command.work_dir.should eql(Pathname.new(Dir.tmpdir + "/scissor-video-work-" + $$.to_s))
     command.work_dir.should be_exist
+    command.command.should be_nil
+  end
+
+  it "should set command variable" do
+    command = Scissor::Command.new({:command => 'ls'})
+    command.work_dir.should eql(Pathname.new(Dir.tmpdir + "/scissor-video-work-" + $$.to_s))
+    command.work_dir.should be_exist
+    command.command.should eql('ls')
   end
 
   it "should return command result by #_run_command" do
     command = Scissor::Command.new({})
     command._run_command('ls').should include('Rakefile')
+  end
+
+  it "should log command error when logger.lebel == DEBUG" do
+    _logger = Scissor.logger
+    _level = Scissor.logger.level
+
+    file = 'log.log'
+    Scissor.logger = Logger.new file
+    Scissor.logger.level = Logger::DEBUG
+    command = Scissor::Command.new({})
+    lambda {
+      command._run_command('ls -w')
+    }.should raise_error(Scissor::Command::CommandFailed)
+    f = open file
+    begin
+      buff = f.readlines.join('')
+    ensure
+      f.close
+      File.unlink file
+    end
+    buff.should include "ls: option requires an argument -- 'w'"
+    
+    Scissor.logger = _logger
+    Scissor.logger.level = _level
   end
 
   it "should return command result by #_run_hash" do
