@@ -12,7 +12,7 @@ include FileUtils
 
 NAME              = "scissor-video"
 AUTHOR            = "koyachi"
-EMAIL             = "rtk2106@gmial.com"
+EMAIL             = "rtk2106@gmail.com"
 DESCRIPTION       = "utility to chop video files"
 RUBYFORGE_PROJECT = "scissorvideo"
 HOMEPATH          = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"

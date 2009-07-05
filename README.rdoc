@@ -33,6 +33,6 @@ http://github.com/youpy/scissor/tree/master
 
 == Copyright
 
-Author::  koyachi <rtk2106@gmial.com>
+Author::  koyachi <rtk2106@gmail.com>
 Copyright:: Copyright (c) 2009 koyachi
 License:: MIT
