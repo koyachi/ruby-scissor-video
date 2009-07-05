@@ -13,7 +13,7 @@ include FileUtils
 NAME              = "scissor-video"
 AUTHOR            = "koyachi"
 EMAIL             = "rtk2106@gmial.com"
-DESCRIPTION       = ""
+DESCRIPTION       = "utility to chop video files"
 RUBYFORGE_PROJECT = "scissorvideo"
 HOMEPATH          = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 BIN_FILES         = %w(  )
@@ -42,7 +42,7 @@ end
 spec = Gem::Specification.new do |s|
 	s.name              = NAME
 	s.version           = VERS
-	s.platform          = Gem::Platform::RUBY
+ 	s.platform          = Gem::Platform::RUBY
 	s.has_rdoc          = true
 	s.extra_rdoc_files  = ["README.rdoc", "ChangeLog"]
 	s.rdoc_options     += RDOC_OPTS + ['--exclude', '^(examples|extras)/']
