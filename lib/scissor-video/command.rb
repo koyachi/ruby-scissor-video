@@ -3,7 +3,16 @@ require 'open4'
 require 'logger'
 
 module Scissor
-  module Command
+  class Command
+    attr_accessor :work_dir, :command
+
+    def initialize(args)
+      @command = args[:command]
+      @work_dir = args[:work_dir] || Dir.tmpdir + "/scissor-video-work-" + $$.to_s
+      @work_dir = Pathname.new(@work_dir)
+      @work_dir.mkpath
+    end
+
     def run_command(cmd, force = false)
       Scissor.logger.debug("run_command: #{cmd}")
 
@@ -24,7 +33,6 @@ module Scissor
       return result
     end
 
-    @command
     def _run(option, force = false)
       cmd = [@command, option.keys.map {|k| "#{k} #{option[k]}"}].flatten.join(' ')
       run_command(cmd, force)
@@ -36,83 +44,7 @@ module Scissor
     end
 
     def which(command)
-      run_command("which #{command}")
-    end
-  end
-
-  class FFmpeg
-    include Command
-
-    attr_reader :work_dir
-
-    def initialize(path = which('ffmpeg'), work_dir = Dir.tmpdir + "/scissor-video-ffmpeg-work-" + $$.to_s)
-      @command = path.chomp
-      @work_dir = Pathname.new(work_dir)
-      @work_dir.mkpath
-    end
-
-    # sec
-    def get_duration(video)
-      result = run("-i #{video}", true)
-      duration = 0
-      if result.match(/.*?Duration: (\d{2}):(\d{2}):(\d{2}).(\d{2}), start: .*?, bitrate: .*/m)
-        duration = $1.to_i * 60 * 60 +
-          $2.to_i * 60 +
-          $3.to_i +
-          ($4.to_i / 1000.0).to_f
-      end
-      duration
-    end
-
-    def cut(args)
-      input_video = prepare args
-      run(["-i #{input_video}",
-           "-ss #{args[:start].to_f.to_ffmpegtime}",
-           "-t #{args[:duration].to_f.to_ffmpegtime}",
-           "#{args[:output_video]}"].join(' '))
-    end
-
-    def prepare(args)
-      # flv2avi
-      tmpfile = Pathname.new(args[:input_video])
-      if (%w[flv].include? tmpfile.extname.sub(/^\./, '').downcase)
-        tmpfile = @work_dir + (tmpfile.basename.to_s.split('.')[0] + '.avi')
-        unless tmpfile.exist?
-          run(["-i #{args[:input_video]}",
-               tmpfile
-              ].join(' '))
-        end
-        tmpfile
-      else
-        args[:input_video]
-      end
-    end
-
-    def cleanup
-      @work_dir.rmtree
-    end
-
-    def encode(args)
-      run(["-i #{args[:input_video]}",
-           "-vcodec #{args[:vcodec] || 'msmpeg4v2'}",
-           "-acodec #{args[:acodec] || 'mp2'}",
-           "#{args[:output_video]}"].join(' '))
-    end
-  end
-
-  class Mencoder
-    include Command
-
-    def initialize(path = which('mencoder'))
-      @command = path.chomp
-    end
-
-    def concat(args)
-      run(["#{args[:input_videos].join(' ')}",
-           "-o #{args[:output_video]}",
-           "-oac copy",
-           "-ovc copy"
-      ].join(' '))
+      run_command("which #{command}").chomp
     end
   end
 end

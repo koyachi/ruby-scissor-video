@@ -2,7 +2,16 @@
 require 'digest/md5'
 
 module Scissor
+  # video対応
   class Chunk
+    def +(other)
+      new_instance = self.class.new
+      new_instance.add_fragments(@fragments + other.fragments)
+      new_instance
+    end
+  end
+
+  class VideoChunk < Chunk
     def initialize(filename = nil)
       @fragments = []
 
@@ -37,7 +46,7 @@ module Scissor
       end
 
       concat_files = []
-      ffmpeg = FFmpeg.new
+      ffmpeg = Scissor.ffmpeg
 
       position = 0.0
       tmpdir = ffmpeg.work_dir
@@ -63,9 +72,9 @@ module Scissor
           position += fragment_duration
         end
 
-        Mencoder.new.concat({
-                              :input_videos => concat_files,
-                              :output_video => tmpfile
+        Scissor.mencoder.concat({
+                                  :input_videos => concat_files,
+                                  :output_video => tmpfile
         })
 
         ffmpeg.encode({

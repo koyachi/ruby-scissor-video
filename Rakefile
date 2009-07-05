@@ -58,7 +58,7 @@ spec = Gem::Specification.new do |s|
 	s.autorequire       = ""
 	s.test_files        = Dir["test/*_test.rb"]
 
-    s.add_dependency('scissor')
+    s.add_dependency('youpy-scissor')
     s.add_dependency('open4')
 
 	s.files = %w(README.rdoc ChangeLog Rakefile) +

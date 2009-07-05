@@ -16,7 +16,10 @@ module Scissor
     end
 
     def length
-      FFmpeg.new.get_duration(@filename)
+#      FFmpeg.new.get_duration(@filename)
+#      FFmpeg.get_duration(@filename)
+#      ffmpeg.get_duration(@filename)
+      Scissor.ffmpeg.get_duration(@filename)
     end
   end
 end

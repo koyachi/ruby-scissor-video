@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.description = %q{utility to chop video files}
   s.email = %q{rtk2106@gmail.com}
   s.extra_rdoc_files = ["README.rdoc", "ChangeLog"]
-  s.files = ["README.rdoc", "ChangeLog", "Rakefile", "lib/scissor-video", "lib/scissor-video/video.rb", "lib/scissor-video/command.rb~", "lib/scissor-video/command.rb", "lib/scissor-video/video_file.rb", "lib/scissor-video/video.rb~", "lib/scissor-video/video_file.rb~", "lib/scissor-video.rb"]
+  s.files = ["README.rdoc", "ChangeLog", "Rakefile", "lib/scissor-video", "lib/scissor-video/chunk.rb", "lib/scissor-video/command.rb", "lib/scissor-video/video_file.rb", "lib/scissor-video/float.rb", "lib/scissor-video.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://scissorvideo.rubyforge.org}
   s.rdoc_options = ["--title", "scissor-video documentation", "--charset", "utf-8", "--opname", "index.html", "--line-numbers", "--main", "README.rdoc", "--inline-source", "--exclude", "^(examples|extras)/"]
@@ -25,14 +25,14 @@ Gem::Specification.new do |s|
     s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<scissor>, [">= 0"])
+      s.add_runtime_dependency(%q<youpy-scissor>, [">= 0"])
       s.add_runtime_dependency(%q<open4>, [">= 0"])
     else
-      s.add_dependency(%q<scissor>, [">= 0"])
+      s.add_dependency(%q<youpy-scissor>, [">= 0"])
       s.add_dependency(%q<open4>, [">= 0"])
     end
   else
-    s.add_dependency(%q<scissor>, [">= 0"])
+    s.add_dependency(%q<youpy-scissor>, [">= 0"])
     s.add_dependency(%q<open4>, [">= 0"])
   end
 end
