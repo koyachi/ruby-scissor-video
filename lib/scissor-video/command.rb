@@ -65,8 +65,8 @@ module Scissor
     def cut(args)
       input_video = prepare args
       run(["-i #{input_video}",
-           "-ss #{args[:start]}",
-           "-t #{args[:duration]}",
+           "-ss #{args[:start].to_f.to_ffmpegtime}",
+           "-t #{args[:duration].to_f.to_ffmpegtime}",
            "#{args[:output_video]}"].join(' '))
     end
 

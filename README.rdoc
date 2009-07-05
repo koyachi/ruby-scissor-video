@@ -19,7 +19,7 @@ utility to chop video files
 
 === Gem Installation
 
-	gem install scissorvideo
+	gem install scissor-video
 
 
 == Features/Problems

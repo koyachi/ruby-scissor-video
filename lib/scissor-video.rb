@@ -1,4 +1,5 @@
 require 'scissor'
+require 'scissor-video/float'
 require 'scissor-video/command'
 require 'scissor-video/video'
 require 'scissor-video/video_file'

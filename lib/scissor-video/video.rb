@@ -53,9 +53,8 @@ module Scissor
             ffmpeg.cut({
                          :input_video => fragment_filename,
                          :output_video => fragment_tmpfile,
-                         # 精度。。。
-                         :start => fragment.start.to_i,
-                         :duration => fragment_duration.to_i
+                         :start => fragment.start,
+                         :duration => fragment_duration
             })
             concat_files.push fragment_tmpfile
           end
