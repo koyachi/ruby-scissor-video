@@ -13,7 +13,7 @@ module Scissor
       @work_dir.mkpath
     end
 
-    def run_command(cmd, force = false)
+    def _run_command(cmd, force = false)
       Scissor.logger.debug("run_command: #{cmd}")
 
       result = ''
@@ -33,18 +33,26 @@ module Scissor
       return result
     end
 
-    def _run(option, force = false)
+    def _run_hash(option, force = false)
       cmd = [@command, option.keys.map {|k| "#{k} #{option[k]}"}].flatten.join(' ')
-      run_command(cmd, force)
+      _run_command(cmd, force)
     end
 
     # パラメタ指定順番意識するものもあるので
-    def run(option_str, force = false)
-      run_command([@command, option_str].join(' '), force)
+    def _run_str(option_str, force = false)
+      _run_command([@command, option_str].join(' '), force)
+    end
+
+    def run(option, force = false)
+      if option.class == Hash
+        _run_hash option, force
+      else
+        _run_str option, force
+      end
     end
 
     def which(command)
-      run_command("which #{command}").chomp
+      _run_command("which #{command}").chomp
     end
   end
 end
