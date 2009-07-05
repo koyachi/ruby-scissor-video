@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.description = %q{utility to chop video files}
   s.email = %q{rtk2106@gmail.com}
   s.extra_rdoc_files = ["README.rdoc", "ChangeLog"]
-  s.files = ["README.rdoc", "ChangeLog", "Rakefile", "lib/scissor-video", "lib/scissor-video/chunk.rb", "lib/scissor-video/command.rb", "lib/scissor-video/video_file.rb", "lib/scissor-video/float.rb", "lib/scissor-video.rb"]
+  s.files = ["README.rdoc", "ChangeLog", "Rakefile", "lib/scissor-video", "lib/scissor-video/chunk.rb", "lib/scissor-video/command.rb", "lib/scissor-video/video_file.rb", "lib/scissor-video/float.rb", "lib/scissor-video/command", "lib/scissor-video/command/ffmpeg.rb", "lib/scissor-video/command/mencoder.rb", "lib/scissor-video.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://scissorvideo.rubyforge.org}
   s.rdoc_options = ["--title", "scissor-video documentation", "--charset", "utf-8", "--opname", "index.html", "--line-numbers", "--main", "README.rdoc", "--inline-source", "--exclude", "^(examples|extras)/"]
