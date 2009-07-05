@@ -1,0 +1,38 @@
+
+= scissor-video
+
+utility to chop video files
+
+== Description
+
+
+== Installation
+
+=== Requirements
+
+* {FFmpeg}[http://ffmpeg.mplayerhq.hu/]
+* {scissor}[http://github.com/youpy/scissor/tree/master]
+
+=== Archive Installation
+
+	rake install
+
+=== Gem Installation
+
+	gem install scissorvideo
+
+
+== Features/Problems
+
+
+== Synopsis
+
+== Original
+
+http://github.com/youpy/scissor/tree/master
+
+== Copyright
+
+Author::  koyachi <rtk2106@gmial.com>
+Copyright:: Copyright (c) 2009 koyachi
+License:: MIT
