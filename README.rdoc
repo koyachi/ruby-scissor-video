@@ -10,8 +10,9 @@ utility to chop video files
 
 === Requirements
 
-* {FFmpeg}[http://ffmpeg.mplayerhq.hu/]
 * {scissor}[http://github.com/youpy/scissor/tree/master]
+* {FFmpeg}[http://ffmpeg.mplayerhq.hu/]
+* {Mencoder}[http://en.wikipedia.org/wiki/MEncoder]
 
 === Archive Installation
 
