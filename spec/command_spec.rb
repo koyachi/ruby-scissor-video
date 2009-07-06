@@ -28,33 +28,81 @@ describe Scissor::Command do
     command.command.should eql('ls')
   end
 
-  it "should return command result by #_run_command" do
-    command = Scissor::Command.new({})
-    command._run_command('ls').should include('Rakefile')
-  end
-
-  it "should log command error when logger.lebel == DEBUG" do
-    _logger = Scissor.logger
-    _level = Scissor.logger.level
-
-    file = 'log.log'
-    Scissor.logger = Logger.new file
-    Scissor.logger.level = Logger::DEBUG
-    command = Scissor::Command.new({})
-    lambda {
-      command._run_command('ls -w')
-    }.should raise_error(Scissor::Command::CommandFailed)
-    f = open file
-    begin
-      buff = f.readlines.join('')
-    ensure
-      f.close
-      File.unlink file
+  describe "#_run_command" do
+    before do
+      @ls_err = "ls: option requires an argument -- 'w'"
+      @read_file = lambda {|file|
+        f = open file
+        begin
+          buff = f.readlines.join('')
+        ensure
+          f.close
+          File.unlink file
+        end
+        buff
+      }
     end
-    buff.should include "ls: option requires an argument -- 'w'"
-    
-    Scissor.logger = _logger
-    Scissor.logger.level = _level
+
+    after do
+    end
+
+    it "should return command result" do
+      command = Scissor::Command.new({})
+      command._run_command('ls').should include('Rakefile')
+    end
+
+    it "should log command error when logger.lebel == DEBUG" do
+      _logger = Scissor.logger
+      _level = Scissor.logger.level
+
+      file = 'log.log'
+      Scissor.logger = Logger.new file
+      Scissor.logger.level = Logger::DEBUG
+      command = Scissor::Command.new({})
+      lambda {
+        command._run_command('ls -w')
+      }.should raise_error(Scissor::Command::CommandFailed)
+      @read_file.call(file).should include @ls_err
+      
+      Scissor.logger = _logger
+      Scissor.logger.level = _level
+    end
+
+    it "should not log command error when logger.level is default(INFO)" do
+      _logger = Scissor.logger
+      _level = Scissor.logger.level
+
+      file = 'log.log'
+      Scissor.logger = Logger.new file
+      Scissor.logger.level = Logger::INFO
+      command = Scissor::Command.new({})
+      lambda {
+        command._run_command('ls -w')
+      }.should raise_error(Scissor::Command::CommandFailed)
+      @read_file.call(file).should_not include @ls_err
+      
+      Scissor.logger = _logger
+      Scissor.logger.level = _level
+    end
+
+    it "should return error output as result when force = true" do
+      _logger = Scissor.logger
+      _level = Scissor.logger.level
+
+      file = 'log.log'
+      Scissor.logger = Logger.new file
+      Scissor.logger.level = Logger::DEBUG
+      result = ''
+      command = Scissor::Command.new({})
+      lambda {
+        result = command._run_command('ls -w', true)
+      }.should_not raise_error(Scissor::Command::CommandFailed)
+      @read_file.call(file).should include @ls_err
+      result.should include @ls_err
+      
+      Scissor.logger = _logger
+      Scissor.logger.level = _level
+    end
   end
 
   it "should return command result by #_run_hash" do
