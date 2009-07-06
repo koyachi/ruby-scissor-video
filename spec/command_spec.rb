@@ -46,9 +46,17 @@ describe Scissor::Command do
     after do
     end
 
+    it "shoud create work_dir" do
+      command = Scissor::Command.new({})
+      command.work_dir.should be_exist
+      command.cleanup
+      command.work_dir.should_not be_exist
+    end
+
     it "should return command result" do
       command = Scissor::Command.new({})
       command._run_command('ls').should include('Rakefile')
+      command.cleanup
     end
 
     it "should log command error when logger.lebel == DEBUG" do
@@ -66,6 +74,7 @@ describe Scissor::Command do
       
       Scissor.logger = _logger
       Scissor.logger.level = _level
+      command.cleanup
     end
 
     it "should not log command error when logger.level is default(INFO)" do
@@ -83,6 +92,7 @@ describe Scissor::Command do
       
       Scissor.logger = _logger
       Scissor.logger.level = _level
+      command.cleanup
     end
 
     it "should return error output as result when force = true" do
@@ -102,6 +112,7 @@ describe Scissor::Command do
       
       Scissor.logger = _logger
       Scissor.logger.level = _level
+      command.cleanup
     end
   end
 
@@ -113,18 +124,22 @@ describe Scissor::Command do
   it "should return command result by #_run_str" do
     command = Scissor::Command.new({:command => 'date'})
     command._run_str('-d 1980/06/01').should include('1980')
+    command.cleanup
   end
 
   it "shoud return commnad result by #run" do
     command_hash = Scissor::Command.new({:command => 'date'})
     command_hash.run({'-d' => '1980/06/01'}).should include('1980')
+    command_hash.cleanup
     
     command_str = Scissor::Command.new({:command => 'date'})
     command_str.run('-d 1980/06/01').should include('1980')
+    command_str.cleanup
   end
 
   it "should return command path by #which" do
     command = Scissor::Command.new({})
     command.which('ls').should include('/bin/ls')
+    command.cleanup
   end
 end

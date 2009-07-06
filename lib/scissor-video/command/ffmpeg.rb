@@ -18,12 +18,8 @@ module Scissor
         end
         tmpfile
       else
-        args[:input_video]
+        raise UnknownFormat
       end
-    end
-
-    def cleanup
-      @work_dir.rmtree if @work_dir.exist?
     end
 
     def cut(args)
@@ -32,6 +28,7 @@ module Scissor
            "-ss #{args[:start].to_f.to_ffmpegtime}",
            "-t #{args[:duration].to_f.to_ffmpegtime}",
            "#{args[:output_video]}"].join(' '))
+      ScissorVideo(args[:output_video])
     end
 
     def encode(args)

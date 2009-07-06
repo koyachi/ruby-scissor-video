@@ -8,12 +8,17 @@ module Scissor
 
     class Error < StandardError; end
     class CommandFailed < Error; end
+    class UnknownFormat < Error; end
 
     def initialize(args)
       @command = args[:command]
       @work_dir = args[:work_dir] || Dir.tmpdir + "/scissor-video-work-" + $$.to_s
       @work_dir = Pathname.new(@work_dir)
       @work_dir.mkpath
+    end
+
+    def cleanup
+      @work_dir.rmtree if @work_dir.exist?
     end
 
     def _run_command(cmd, force = false)
