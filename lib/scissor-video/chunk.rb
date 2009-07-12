@@ -12,6 +12,8 @@ module Scissor
   end
 
   class VideoChunk < Chunk
+    attr_reader :fragments
+
     def initialize(filename = nil)
       @fragments = []
 
@@ -52,6 +54,7 @@ module Scissor
       tmpdir = ffmpeg.work_dir
       tmpfile = tmpdir + 'tmp.avi'
 
+      concat_count = 0
       begin
         @fragments.each_with_index do |fragment, index|
           fragment_filename = fragment.filename
@@ -68,7 +71,6 @@ module Scissor
             })
             concat_files.push fragment_tmpfile
           end
-
           position += fragment_duration
         end
 
@@ -86,6 +88,16 @@ module Scissor
       end
 
       self.class.new(filename)
+    end
+
+    def strip_audio
+      audio_fragments = []
+      ffmpeg = Scissor.ffmpeg
+      @fragments.each_with_index do |fragment, index|
+        fragment_filename = fragment.filename
+        audio_fragments.push ffmpeg.strip_audio(fragment_filename)
+      end
+      Scissor.join audio_fragments
     end
   end
 end

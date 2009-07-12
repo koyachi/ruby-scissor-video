@@ -31,11 +31,15 @@ module Scissor
   @logger.level = Logger::INFO
 
   class << self
-    attr_accessor :logger
+    attr_accessor :logger, :workspace
   end
 
   def logger
     self.class.logger
+  end
+
+  def workspace
+    self.class.workspace
   end
 
   class << self

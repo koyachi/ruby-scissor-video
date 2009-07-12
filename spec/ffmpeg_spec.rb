@@ -49,4 +49,26 @@ describe Scissor::FFmpeg do
       chunk.duration.should be_close(5, 0.5) #?
     end
   end
+
+  describe "#encode" do
+    it "should be encode" do
+      pending('i dont know how to test')
+    end
+  end
+
+  describe "#get_duration" do
+    it "should return duration" do
+      # sec
+      @ffmpeg.get_duration(fixture('sample.flv')).should eql(27.027)
+    end
+  end
+
+  describe "#strip_audio" do
+    it "should return Scissor::Chunk" do
+      audio_chunk = @ffmpeg.strip_audio(fixture('sample.flv'))
+      audio_chunk.should be_an_instance_of(Scissor::Chunk)
+      audio_chunk.should_not be_an_instance_of(Scissor::VideoChunk)
+      audio_chunk.duration.should be_close(27.027, 0.5) #?
+    end
+  end
 end

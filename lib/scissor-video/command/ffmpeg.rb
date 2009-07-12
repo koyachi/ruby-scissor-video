@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+require 'scissor'
 module Scissor
   class FFmpeg < Command
     def initialize(command = which('ffmpeg'), work_dir = nil)
@@ -53,10 +55,14 @@ module Scissor
 
     def strip_audio(video)
       # return Scissor::Chunk(Audio)
-      output_audio = video.sub(/^(.*)\..*?$/, '\1.mp3')
-      run(["-i #{video}",
-                  "#{output_audio}"])
-      Scissor::Chunk(output_audio)
+      tmpfile = Pathname.new(video)
+      tmpfile = @work_dir + (tmpfile.basename.to_s.split('.')[0] + '.mp3')
+      unless tmpfile.exist?
+        run([#"-y", # 同名ファイル上書き
+             "-i #{video}",
+             tmpfile].join(' '))
+      end
+      Scissor::Chunk.new(tmpfile)
     end
   end
 end

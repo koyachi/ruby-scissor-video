@@ -42,14 +42,27 @@ describe Scissor do
     result.duration.to_i.should eql(25)
   end
 
-  it "should save workfiles if save_workfiles option is true" do
-    scissor = @video.slice(0, 20) + @video.slice(20, 5)
-    result = scissor.to_file(@tmp_dir + '/out.avi', :save_workfiles => true)
+  def test_workfile(video, tmp_dir)
+    scissor = video.slice(0, 20) + video.slice(20, 5)
+    result = scissor.to_file("#{tmp_dir}/out.avi", :save_workfiles => true)
     result.should be_an_instance_of(Scissor::VideoChunk)
     result.duration.to_i.should eql(25)
     
     ffmpeg = Scissor::FFmpeg.new
     ffmpeg.work_dir.should be_exist
     ffmpeg.cleanup
+  end
+
+  it "should save workfiles if save_workfiles option is true" do
+    test_workfile(@video, @tmp_dir)
+  end
+
+  it "should work with workspace if workspace was specified" do
+    Scissor.workspace = './workdspace01'
+
+    video = ScissorVideo(fixture('sample.flv'))
+    test_workfile(video, Scissor.workspace)
+
+    Scissor.workspace = nil
   end
 end

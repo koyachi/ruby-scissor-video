@@ -11,7 +11,7 @@ module Scissor
            "-o #{args[:output_video]}",
            "-oac copy",
            "-ovc copy"
-      ].join(' '))
+      ].join(' '), false, true)
     end
   end
 end
