@@ -5,6 +5,8 @@ require 'timeout'
 
 module Scissor
   class Command
+    include Loggable
+
     attr_accessor :work_dir, :command
 
     class Error < StandardError; end
@@ -23,7 +25,7 @@ module Scissor
     end
 
     def _run_command(cmd, force = false, ignore_error = false)
-      Scissor.logger.debug("run_command: #{cmd}")
+      logger.debug("run_command: #{cmd}")
 
       result = ''
       retry_count = 0
@@ -41,7 +43,7 @@ module Scissor
                 rescue => e
                   p e
                 end
-                Scissor.logger.debug(err)
+                logger.debug(err)
                 if force && err
                   result = err
                 end
@@ -52,7 +54,7 @@ module Scissor
         rescue Timeout::Error => e
           retry_count = retry_count + 1
           if retry_count == retry_max
-            Scissor.logger.debug("RETRY MAX: #{cmd}")
+            logger.debug("RETRY MAX: #{cmd}")
             break
           end
         end
