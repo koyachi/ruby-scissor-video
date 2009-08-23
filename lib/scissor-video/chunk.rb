@@ -9,6 +9,15 @@ module Scissor
       new_instance.add_fragments(@fragments + other.fragments)
       new_instance
     end
+
+    def to_videochunk(video)
+      v = ScissorVideo()
+      v.fragments[0] = Scissor::Fragment.new(
+        video,
+        @fragments[0].start,
+        @fragments[0].duration)
+      v
+    end
   end
 
   class VideoChunk < Chunk
