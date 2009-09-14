@@ -2,6 +2,7 @@
 require 'open4'
 require 'logger'
 require 'timeout'
+require 'tmpdir'
 
 module Scissor
   class Command
