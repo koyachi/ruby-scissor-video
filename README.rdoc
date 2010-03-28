@@ -1,4 +1,12 @@
 
+= OBSOLETE!
+
+see scissor:refactor-external-command branch
+* {youpy's scissor refactor-external-command branch}[http://github.com/youpy/scissor/tree/refactor-external-command]
+* {koyachi's scissor refactor-external-command branch}[http://github.com/koyachi/scissor/tree/refactor-external-command]
+
+
+
 = scissor-video
 
 utility to chop video files
